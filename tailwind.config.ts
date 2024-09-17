@@ -63,8 +63,8 @@ const config: Config = {
 			container: {
 				center: true,
 				padding: {
-					DEFAULT: "0.5rem",
-					sm: "1rem",
+					DEFAULT: "0.3rem",
+					sm: "0.5rem",
 					lg: "4rem",
 				},
 				screens: {

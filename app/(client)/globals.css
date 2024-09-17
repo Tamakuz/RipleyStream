@@ -86,3 +86,100 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom styles for react-highlight */
+.hljs {
+  @apply bg-card text-foreground p-4 rounded-md;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-name,
+.hljs-strong {
+  @apply text-primary font-bold;
+}
+
+.hljs-comment {
+  @apply text-muted-foreground;
+}
+
+.hljs-string,
+.hljs-title,
+.hljs-section,
+.hljs-built_in,
+.hljs-literal,
+.hljs-type,
+.hljs-addition,
+.hljs-tag,
+.hljs-quote,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  @apply text-accent-foreground;
+}
+
+.hljs-meta,
+.hljs-subst,
+.hljs-symbol,
+.hljs-regexp,
+.hljs-attribute,
+.hljs-deletion,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-link,
+.hljs-bullet {
+  @apply text-primary;
+}
+
+.hljs-emphasis {
+  @apply italic;
+}
+
+.dark .hljs {
+  @apply bg-card text-foreground;
+}
+
+.dark .hljs-keyword,
+.dark .hljs-selector-tag,
+.dark .hljs-title,
+.dark .hljs-section,
+.dark .hljs-doctag,
+.dark .hljs-name,
+.dark .hljs-strong {
+  @apply text-primary;
+}
+
+.dark .hljs-comment {
+  @apply text-muted-foreground;
+}
+
+.dark .hljs-string,
+.dark .hljs-title,
+.dark .hljs-section,
+.dark .hljs-built_in,
+.dark .hljs-literal,
+.dark .hljs-type,
+.dark .hljs-addition,
+.dark .hljs-tag,
+.dark .hljs-quote,
+.dark .hljs-name,
+.dark .hljs-selector-id,
+.dark .hljs-selector-class {
+  @apply text-accent-foreground;
+}
+
+.dark .hljs-meta,
+.dark .hljs-subst,
+.dark .hljs-symbol,
+.dark .hljs-regexp,
+.dark .hljs-attribute,
+.dark .hljs-deletion,
+.dark .hljs-variable,
+.dark .hljs-template-variable,
+.dark .hljs-link,
+.dark .hljs-bullet {
+  @apply text-primary;
+}

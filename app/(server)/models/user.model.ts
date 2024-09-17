@@ -1,12 +1,14 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 interface IUser extends Document {
-  clerkId: string;
+  email: string;
   tokenApi: string;
+  provider: string;
 }
 
 const UserSchema: Schema = new Schema({
-  clerkId: { type: String, required: true, unique: true },
+  email: { type: String, required: true }, // Set email as unique to prevent duplicates
+  provider: { type: String, required: true },
   tokenApi: { type: String, required: true },
 }, { timestamps: true });
 

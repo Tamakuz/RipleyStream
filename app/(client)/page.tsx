@@ -1,7 +1,10 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoCopy } from "react-icons/io5";
 import { RootLayout } from "./layout/RootLayout";
+
 const exampleData = {
   statusCode: 200,
   status: "success",
@@ -29,6 +32,17 @@ const exampleData = {
 };
 
 export default function Home() {
+  const [hostname, setHostname] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Mendapatkan hostname dari window.location
+      setHostname(`${window.location.protocol}//${window.location.hostname}`);
+    }
+  }, []);
+
+  console.log(hostname);
+
   return (
     <RootLayout>
       <main className="px-4 pb-10 space-y-4">
@@ -49,7 +63,7 @@ export default function Home() {
           <div className="mt-6 p-4 bg-secondary rounded-md">
             <h3 className="text-xl font-semibold mb-2">Base URL</h3>
             <code className="p-2 bg-card rounded-md text-sm flex items-center justify-between">
-              https://api.example.com/v1
+              {hostname}/api/v1
               <Button
                 variant="ghost"
                 size="icon"
