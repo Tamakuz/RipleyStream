@@ -11,6 +11,7 @@ import { dbConnection } from "@/app/(server)/db/dbConnection"
 import toast from "react-hot-toast"
 
 const handler = NextAuth({
+  secret: process.env.NEXTAUTH_SECRET as string,
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID as string,
