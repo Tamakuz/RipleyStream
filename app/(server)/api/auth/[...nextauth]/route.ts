@@ -8,8 +8,6 @@ import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
 import { dbConnection } from "@/app/(server)/db/dbConnection"
 
-import toast from "react-hot-toast"
-
 const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET as string,
   providers: [
@@ -26,7 +24,7 @@ const handler = NextAuth({
     async signIn({ user, account, profile }: any) {
       await dbConnection()
       try {
-        if (user && account) {
+        if (user && account && profile) {
           const existingUser = await User.findOne({ email: user.email, provider: account.provider })
           if (existingUser) {
             if (!existingUser.image && profile?.picture) {
