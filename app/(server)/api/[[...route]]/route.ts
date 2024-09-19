@@ -8,6 +8,7 @@ import { honoMiddleware } from '../../services/honoMiddleware'
 import { getMoviePopular } from '../../services/getMoviePopular'
 import { responseAPI } from '../../utils/responseApi'
 import { getMovieTopRated } from '../../services/getMovieTopRated'
+import { rateLimitedMiddleware } from '../../services/rateLimited'
 const app = new Hono().basePath('/api/v1')
 
 app.use(prettyJSON())
@@ -17,6 +18,9 @@ app.use(async (_, next) => {
 })
 
 app.use(honoMiddleware)
+// app.use("*", rateLimitedMiddleware)
+
+app.get('/', (c) => c.text('Hello, world!'));
 
 app.get('/movies/discover', getMovies)
 app.get('/movie/:id', getMoviesById)
