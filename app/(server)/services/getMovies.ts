@@ -19,7 +19,7 @@ export const getMovies = async (c: Context) => {
     const movies = await Movies.find(options)
       .skip((Number(page) - 1) * Number(limit))
       .limit(Number(limit))
-      .select('_id title poster status tmdb_id imdb_id synopsisID synopsisEN');
+      .select('_id title poster status tmdb_id imdb_id synopsisID synopsisEN tagline status release_date rating');
 
     const totalMovies = await Movies.countDocuments(options);
     const totalPages = Math.ceil(totalMovies / Number(limit));

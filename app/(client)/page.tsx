@@ -10,22 +10,7 @@ const exampleData = {
   status: "success",
   message: "Movies successfully retrieved",
   results: {
-    movies: [
-      {
-        _id: 1,
-        title: "Example Movie",
-        year: 2021,
-        genre: "Action",
-        rating: "PG-13",
-      },
-      {
-        _id: 2,
-        title: "Another Movie",
-        year: 2020,
-        genre: "Comedy",
-        rating: "R",
-      },
-    ],
+    movies: [],
     totalPages: 1,
     currentPage: 1,
   },

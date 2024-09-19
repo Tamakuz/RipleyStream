@@ -29,6 +29,16 @@ const MoviesMenu = [
     label: "Details",
     href: "/reference/movies/details",
     method: "GET",
+  },
+  {
+    label: "Popular",
+    href: "/reference/movies/popular",
+    method: "GET",
+  },
+  {
+    label: "Top Rated",
+    href: "/reference/movies/top-rated",
+    method: "GET",
   }
 ];
 

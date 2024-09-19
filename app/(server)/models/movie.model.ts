@@ -33,6 +33,10 @@ const MovieSchema = new mongoose.Schema(
       type: Number,
       default: null,
     },
+    rating: {
+      type: Number,
+      default: null,
+    },
     synopsisEN: {
       type: String,
       default: null,
@@ -66,6 +70,20 @@ const MovieSchema = new mongoose.Schema(
         resolution: String,
         _id: false,
       },
+    ],
+    alternative_titles: [
+      {
+        title: String,
+        country: String,
+        _id: false,
+      },
+    ],
+    keywords: [
+      {
+        name: String,
+        slug: String,
+        _id: false,
+      }
     ],
   },
   { timestamps: true }

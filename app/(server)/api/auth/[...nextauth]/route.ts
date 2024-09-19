@@ -23,30 +23,35 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ user, account, profile }: any) {
       await dbConnection()
       try {
         if (user && account) {
           const existingUser = await User.findOne({ email: user.email, provider: account.provider })
           if (existingUser) {
+            if (!existingUser.image && profile?.picture) {
+              existingUser.image = profile.picture
+              await existingUser.save()
+            }
             return true
           }
 
-          await User.create({ email: user.email, provider: account.provider, tokenApi: CryptoJS.lib.WordArray.random(32).toString() })
+          await User.create({ email: user.email, provider: account.provider, tokenApi: CryptoJS.lib.WordArray.random(32).toString(), image: profile?.picture })
         }
       } catch (error) {
-        return "/" 
+        console.log(error)
+        return "/"
       }
       return true
     },
     async session({ session }: { session: any }): Promise<any> {
       await dbConnection()
-      const existingUser = await User.findOne({email: session?.user?.email})
-      if (existingUser && session && session.user){
+      const existingUser = await User.findOne({ email: session?.user?.email })
+      if (existingUser && session && session.user) {
         session.user.provider = existingUser.provider;
         session.user.tokenApi = existingUser.tokenApi
       }
-      
+
       return session;
     },
   }

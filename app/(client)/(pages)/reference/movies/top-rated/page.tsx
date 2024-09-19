@@ -2,20 +2,21 @@ import { RootLayout } from "@/app/(client)/layout/RootLayout";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
 
-const RefMovies = () => {
+const TopRatedPage = () => {
   return (
     <RootLayout>
-      <div className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8">
         <section className="mb-8">
           <h1 className="text-3xl font-bold mb-6 text-foreground">
-            Discover Movies
+            Top Rated Movies
           </h1>
           <p className="text-base text-muted-foreground mb-4">
-            The Discover Movies endpoint provides a powerful way to find movies
-            stored in our database. You can search through a wide array of
-            movies using specific criteria such as genre, release year, and user
-            ratings. This endpoint is perfect for creating dynamic movie
-            discovery features in your applications.
+            The Top Rated Movies endpoint provides a curated list of the highest-rated
+            movies in our database. This endpoint returns a collection of movies
+            sorted by their rating, allowing you to showcase critically acclaimed
+            and user-favorite films. It's an excellent feature for highlighting
+            the best movies on your application's homepage or in a dedicated
+            top-rated movies section.
           </p>
         </section>
         <section className="mb-8">
@@ -28,7 +29,7 @@ const RefMovies = () => {
             </h3>
             <div className="flex items-center space-x-2 bg-card p-2 rounded-md">
               <code className="text-base break-all text-foreground">
-                {`{baseUrl}/movies/discover`}
+                {`{baseUrl}/movies/top-rated`}
               </code>
               <Badge
                 variant="outline"
@@ -44,30 +45,24 @@ const RefMovies = () => {
             Query Parameters
           </h2>
           <p className="text-base text-muted-foreground mb-2">
-            Enhance your movie discovery by using the following query parameters
-            to filter search results. These parameters allow you to tailor the
-            movie data retrieved from our database, ensuring that the results
-            meet your specific needs or the preferences of your application's
-            users:
+            Use the following query parameters to customize your request for
+            top-rated movies. These parameters allow you to control the pagination
+            of results, ensuring you get the most relevant data for your needs:
           </p>
           <ul className="list-disc list-inside text-base text-muted-foreground">
-            <li>
-              <strong>genre</strong>: Filter movies by specific genres such as
-              comedy, drama, action, etc.
-            </li>
-            <li>
-              <strong>year</strong>: Retrieve movies released in a particular
-              year to focus on new releases or classic films.
-            </li>
             <li>
               <strong>page</strong>: Specify the page number for paginated
               results. Default is 1.
             </li>
             <li>
-              <strong>limit</strong>: Set the number of movies to return per
-              page. Default is 10.
+              <strong>limit</strong>: Set the number of top-rated movies to return
+              per page. Default is 10.
             </li>
           </ul>
+          <p className="text-base text-muted-foreground mt-2">
+            The movies are automatically sorted by rating in descending
+            order, so you'll always get the highest-rated movies first.
+          </p>
         </section>
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-foreground">
@@ -147,9 +142,9 @@ const RefMovies = () => {
             </pre>
           </div>
         </section>
-      </div>
+      </main>
     </RootLayout>
   );
 };
 
-export default RefMovies;
+export default TopRatedPage;
