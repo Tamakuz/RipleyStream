@@ -83,7 +83,21 @@ const MovieSchema = new mongoose.Schema(
         name: String,
         slug: String,
         _id: false,
-      }
+      },
+    ],
+    cast: [
+      {
+        _id: false,
+        originalName: String,
+        characterName: String,
+        images: [
+          {
+            imageUrl: String,
+            resolution: String,
+            _id: false,
+          },
+        ],
+      },
     ],
   },
   { timestamps: true }

@@ -39,6 +39,11 @@ const MoviesMenu = [
     label: "Top Rated",
     href: "/reference/movies/top-rated",
     method: "GET",
+  },
+  {
+    label: "Cast",
+    href: "/reference/movies/cast",
+    method: "GET",
   }
 ];
 
