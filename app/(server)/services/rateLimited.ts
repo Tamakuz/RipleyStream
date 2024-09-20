@@ -1,35 +1,39 @@
-import { Context, Next } from "hono";
+import { Context, Next, MiddlewareHandler } from "hono";
 import { responseAPI } from "../utils/responseApi";
-import { RateLimiter } from "limiter";
+import { LRUCache } from 'lru-cache'
 
-const limiter = new RateLimiter({
-  tokensPerInterval: 5,
-  interval: "hour",
-});
+const rateLimitCache = new LRUCache({
+  max: 1000, // Increased to handle more unique IPs
+  ttl: 1000 * 60, // 60 seconds (1 minute)
+})
 
-export const rateLimitedMiddleware = async (c: Context, next: Next) => {
-  try {
-    const remainingRequests = await limiter.removeTokens(1);
-    console.log(remainingRequests);
-    
-    if (remainingRequests <= 0) {
-      c.json({
-        status: "error",
-        message: "Terlalu banyak permintaan, coba lagi nanti.",
-        results: null
-      })
-    }
-    
-    await next();
+export const rateLimitedMiddleware: MiddlewareHandler = async (c, next) => {
+  const ip = c.req.header('x-forwarded-for') || 'unknown'
+  let requestData = rateLimitCache.get(ip) as { count: number, timestamp: number } | undefined
   
-  } catch (error) {
-    console.error(error);
+  const now = Date.now()
+  
+  if (!requestData || now - requestData.timestamp >= 60000) {
+    // If no previous request or 60 seconds have passed, reset the count
+    requestData = { count: 1, timestamp: now }
+  } else {
+    // Increment the count for existing requests within 60 seconds
+    requestData.count++
+  }
+  
+  rateLimitCache.set(ip, requestData)
+  
+  console.log(`IP: ${ip}, Request Count: ${requestData.count}`)
+  
+  if (requestData.count > 60) {
     return responseAPI({
       c,
-      statusCode: 500,
+      statusCode: 429,
       status: "error",
-      message: "Internal server error",
+      message: "Too many requests. Please try again after 1 minute.",
       results: null,
-    });
+    })
   }
-};
+  
+  await next()
+}

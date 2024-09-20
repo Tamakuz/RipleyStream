@@ -10,16 +10,21 @@ import { responseAPI } from '../../utils/responseApi'
 import { getMovieTopRated } from '../../services/getMovieTopRated'
 import { rateLimitedMiddleware } from '../../services/rateLimited'
 import { getMovieCast } from '../../services/getMovieCast'
+import { LRUCache } from 'lru-cache'
+
 const app = new Hono().basePath('/api/v1')
 
 app.use(prettyJSON())
-app.use(async (_, next) => {
-  await dbConnection()
-  await next()
+app.use(async (c, next) => {
+  const pathname = c.req.path;
+  if (pathname !== '/api/v1') {
+    await dbConnection();
+  }
+  await next();
 })
 
-app.use(honoMiddleware)
-// app.use("*", rateLimitedMiddleware)
+// app.use(honoMiddleware)
+app.use("*", rateLimitedMiddleware)
 
 app.get('/', (c) => c.text('Hello, world!'));
 
