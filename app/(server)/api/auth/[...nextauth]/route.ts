@@ -24,17 +24,23 @@ const handler = NextAuth({
     async signIn({ user, account, profile }: any) {
       await dbConnection()
       try {
-        if (user && account && profile) {
+        if (user && account) {
           const existingUser = await User.findOne({ email: user.email, provider: account.provider })
           if (existingUser) {
-            if (!existingUser.image && profile?.picture) {
-              existingUser.image = profile.picture
+            if (!existingUser.image) {
+              existingUser.image = user.image
               await existingUser.save()
             }
             return true
           }
 
-          await User.create({ email: user.email, provider: account.provider, tokenApi: CryptoJS.lib.WordArray.random(32).toString(), image: profile?.picture })
+          const image = profile?.picture || user.image || 'default_image_url'
+          await User.create({
+            email: user.email,
+            provider: account.provider,
+            tokenApi: CryptoJS.lib.WordArray.random(32).toString(),
+            image: image
+          })
         }
       } catch (error) {
         console.log(error)
