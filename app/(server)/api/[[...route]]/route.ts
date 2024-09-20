@@ -18,7 +18,7 @@ app.use(async (_, next) => {
   await next()
 })
 
-// app.use(honoMiddleware)
+app.use(honoMiddleware)
 // app.use("*", rateLimitedMiddleware)
 
 app.get('/', (c) => c.text('Hello, world!'));
