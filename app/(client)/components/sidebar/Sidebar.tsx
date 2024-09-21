@@ -47,6 +47,14 @@ const MoviesMenu = [
   }
 ];
 
+const SearchMenu = [
+  {
+    label: "Search",
+    href: "/reference/movies/search",
+    method: "GET",
+  }
+];
+
 export const Sidebar = () => {
   const pathname = usePathname();
 
@@ -88,6 +96,44 @@ export const Sidebar = () => {
               </h2>
               <ul className="pl-2">
                 {MoviesMenu.map((item, index) => (
+                  <li
+                    key={index}
+                    className={cn(
+                      "mb-1 hover:bg-secondary py-1 px-2 rounded-md",
+                      pathname === item.href ? "bg-secondary" : ""
+                    )}
+                  >
+                    <Link
+                      scroll={false}
+                      href={item.href}
+                      className="flex items-center justify-between space-x-2 text-foreground/80 hover:text-foreground"
+                    >
+                      <span className="flex items-center gap-2">
+                        {item.label}
+                      </span>
+                      {item.method && (
+                        <Badge
+                          variant="outline"
+                          className={`ml-2 ${
+                            item.method === "GET"
+                              ? "bg-green-100 text-green-800 border-green-300"
+                              : ""
+                          }`}
+                        >
+                          {item.method}
+                        </Badge>
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
+            <li className="mb-4">
+              <h2 className="text-foreground font-semibold text-lg mb-2">
+                Search
+              </h2>
+              <ul className="pl-2">
+                {SearchMenu.map((item, index) => (
                   <li
                     key={index}
                     className={cn(

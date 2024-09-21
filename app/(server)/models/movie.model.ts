@@ -5,6 +5,7 @@ const MovieSchema = new mongoose.Schema(
     title: {
       type: String,
       default: null,
+      index: true,  // Indeks untuk mempercepat pencarian berdasarkan title
     },
     tagline: {
       type: String,
@@ -21,6 +22,7 @@ const MovieSchema = new mongoose.Schema(
     release_date: {
       type: String,
       default: null,
+      index: true,  // Indeks untuk mempercepat pencarian berdasarkan release date
     },
     poster: [
       {
@@ -40,10 +42,12 @@ const MovieSchema = new mongoose.Schema(
     synopsisEN: {
       type: String,
       default: null,
+      index: true,  // Indeks untuk mempercepat pencarian berdasarkan synopsisEN
     },
     synopsisID: {
       type: String,
       default: null,
+      index: true,  // Indeks untuk mempercepat pencarian berdasarkan synopsisID
     },
     imdb_id: {
       type: String,
@@ -102,6 +106,11 @@ const MovieSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Menambahkan compound index untuk pencarian yang lebih kompleks
+MovieSchema.index({ title: "text", synopsisEN: "text", synopsisID: "text" });
+MovieSchema.index({ release_date: 1 });
+MovieSchema.index({ genres: 1 });
 
 const Movie = mongoose.models.Movie || mongoose.model("Movie", MovieSchema);
 

@@ -23,7 +23,7 @@ export const rateLimitedMiddleware: MiddlewareHandler = async (c, next) => {
   
   rateLimitCache.set(ip, requestData)
   
-  console.log(`IP: ${ip}, Request Count: ${requestData.count}`)
+  // console.log(`IP: ${ip}, Request Count: ${requestData.count}`)
   
   if (requestData.count > 60) {
     return responseAPI({

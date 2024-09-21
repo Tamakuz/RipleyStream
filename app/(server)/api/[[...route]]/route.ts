@@ -4,13 +4,13 @@ import { prettyJSON } from 'hono/pretty-json'
 import { dbConnection } from '../../db/dbConnection'
 import { getMovies } from '../../services/getMovies'
 import { getMoviesById } from '../../services/getMovieById'
-import { honoMiddleware } from '../../services/honoMiddleware'
 import { getMoviePopular } from '../../services/getMoviePopular'
 import { responseAPI } from '../../utils/responseApi'
 import { getMovieTopRated } from '../../services/getMovieTopRated'
 import { rateLimitedMiddleware } from '../../services/rateLimited'
 import { getMovieCast } from '../../services/getMovieCast'
-import { LRUCache } from 'lru-cache'
+import { getSearchMovie } from '../../services/getSearchMovie'
+import { honoMiddleware } from '../../services/honoMiddleware'
 
 const app = new Hono().basePath('/api/v1')
 
@@ -33,6 +33,7 @@ app.get('/movie/:id', getMoviesById)
 app.get('/movies/popular', getMoviePopular)
 app.get('/movies/top-rated', getMovieTopRated)
 app.get('/movie/cast/:movieId', getMovieCast)
+app.get('/movies/search', getSearchMovie)
 
 
 // Handle not found routes
