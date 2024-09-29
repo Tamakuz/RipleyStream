@@ -14,10 +14,18 @@ import { honoMiddleware } from '../../services/honoMiddleware'
 import { getAnimes } from '../../services/animes/getAnimes'
 import { getAnimeById } from '../../services/animes/getAnimeById'
 import { getAnimePopular } from '../../services/animes/getAnimePopular'
+import { cors } from 'hono/cors'
 
 const app = new Hono().basePath('/api/v1')
 
 app.use(prettyJSON())
+
+app.use(cors({
+  origin: '*',
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['*']
+}))
+
 app.use(async (c, next) => {
   const pathname = c.req.path;
   if (pathname !== '/api/v1') {
