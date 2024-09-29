@@ -1,10 +1,10 @@
 import { Context } from "hono"
-import { responseAPI } from "../utils/responseApi"
-import Movies from "../models/movie.model"
+import { responseAPI } from "../../utils/responseApi"
+import Anime from "../../models/anime.model"
 
-export const getMovies = async (c: Context) => {
+export const getAnimes = async (c: Context) => {
   try {
-    const { page = '1', limit = '10', genre = '', year = ''} = c.req.query();
+    const { page = '1', limit = '10', genre = '', year = '' } = c.req.query();
 
     let options = {};
 
@@ -16,20 +16,20 @@ export const getMovies = async (c: Context) => {
       options = { ...options, release_date: { $regex: `^${year}` } };
     }
 
-    const movies = await Movies.find(options)
+    const animes = await Anime.find(options)
       .skip((Number(page) - 1) * Number(limit))
       .limit(Number(limit))
-      .select('_id title poster status tmdb_id imdb_id synopsisID synopsisEN tagline status release_date rating');
+      .select('_id title status synopsisID synopsisEN rating images alternative_titles type airing aired score season year ');
 
-    const totalMovies = await Movies.countDocuments(options);
-    const totalPages = Math.ceil(totalMovies / Number(limit));
+    const totalAnimes = await Anime.countDocuments(options);
+    const totalPages = Math.ceil(totalAnimes / Number(limit));
 
-    if (movies.length === 0) {
+    if (animes.length === 0) {
       return responseAPI({
         c,
         statusCode: 404,
         status: "error",
-        message: "No movies found",
+        message: "No animes found",
         results: [],
       })
     }
@@ -38,9 +38,9 @@ export const getMovies = async (c: Context) => {
       c,
       statusCode: 200,
       status: "success",
-      message: "Movies fetched successfully",
+      message: "Animes fetched successfully",
       results: {
-        movies,
+        animes,
         totalPages,
         currentPage: Number(page),
       },
@@ -51,7 +51,7 @@ export const getMovies = async (c: Context) => {
       c,
       statusCode: 500,
       status: "error",
-      message: 'Failed to fetch movies',
+      message: 'Failed to fetch animes',
       results: [],
     });
   }

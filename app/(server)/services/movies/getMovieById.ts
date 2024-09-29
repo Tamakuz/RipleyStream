@@ -1,6 +1,6 @@
 import { Context } from "hono";
-import Movie from "../models/movie.model";
-import { responseAPI } from "../utils/responseApi";
+import Movie from "../../models/movie.model";
+import { responseAPI } from "../../utils/responseApi";
 import mongoose from "mongoose";
 
 export const getMoviesById = async (c: Context) => {

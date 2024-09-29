@@ -1,6 +1,6 @@
-import MovieModel from "../models/movie.model";
-import { dbConnection } from "../db/dbConnection";
-import { responseAPI } from "../utils/responseApi";
+import MovieModel from "../../models/movie.model";
+import { dbConnection } from "../../db/dbConnection";
+import { responseAPI } from "../../utils/responseApi";
 import { Context } from "hono";
 
 export const getMovieTopRated = async (c: Context) => {

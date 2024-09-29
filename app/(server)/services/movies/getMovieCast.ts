@@ -1,6 +1,6 @@
 import { Context } from "hono";
-import MovieModel from "../models/movie.model";
-import { responseAPI } from "../utils/responseApi";
+import MovieModel from "../../models/movie.model";
+import { responseAPI } from "../../utils/responseApi";
 
 export const getMovieCast = async (c: Context) => {
   try {
@@ -23,7 +23,7 @@ export const getMovieCast = async (c: Context) => {
       statusCode: 200,
       status: "success",
       message: "Movie cast fetched successfully",
-      results: movie.cast, 
+      results: movie.cast,
     });
   } catch (error) {
     return responseAPI({
@@ -31,7 +31,7 @@ export const getMovieCast = async (c: Context) => {
       statusCode: 500,
       status: "error",
       message: "Internal server error",
-      results: null,  
+      results: null,
     });
   }
 }

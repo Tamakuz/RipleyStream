@@ -1,6 +1,6 @@
-import MovieModel from "../models/movie.model";
-import { dbConnection } from "../db/dbConnection";
-import { responseAPI } from "../utils/responseApi";
+import MovieModel from "../../models/movie.model";
+import { dbConnection } from "../../db/dbConnection";
+import { responseAPI } from "../../utils/responseApi";
 import { Context } from "hono";
 
 export const getMoviePopular = async (c: Context) => {
@@ -15,7 +15,7 @@ export const getMoviePopular = async (c: Context) => {
       .sort({ popularity: -1 })
       .lean()
       .exec();
-    
+
     const totalMovies = await MovieModel.countDocuments({});
     const totalPages = Math.ceil(totalMovies / Number(limit));
 
