@@ -26,7 +26,10 @@ export default function Home() {
     }
   }, []);
 
-  console.log(hostname);
+  const copyBaseUrl = () => {
+    const baseUrl = `${hostname}/api/v1`;
+    navigator.clipboard.writeText(baseUrl)
+  };
 
   return (
     <RootLayout>
@@ -53,6 +56,7 @@ export default function Home() {
                 variant="ghost"
                 size="icon"
                 className="active:scale-95 transition-transform duration-150"
+                onClick={copyBaseUrl}
               >
                 <IoCopy className="w-4 h-4" />
               </Button>
