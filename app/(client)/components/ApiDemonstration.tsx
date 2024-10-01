@@ -4,15 +4,29 @@ import { Button } from "@/components/ui/button"
 import Highlight from "react-highlight";
 import "highlight.js/styles/atom-one-dark.css";
 
-const ApiDemonstration: React.FC<{ token: string | undefined }> = ({ token }) => {
+interface ApiDemonstrationProps {
+  token: string | undefined;
+  endpoint: string;
+  queryParams?: Record<string, string>;
+}
+
+const ApiDemonstration: React.FC<ApiDemonstrationProps> = ({ token, endpoint, queryParams }) => {
   const [result, setResult] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
+
+  const buildQueryString = (params: Record<string, string> | undefined) => {
+    if (!params) return '';
+    return Object.entries(params)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+  };
 
   const fetchData = async () => {
     setLoading(true);
     try {
+      const queryString = buildQueryString(queryParams);
       const response = await fetch(
-        `/api/v1/movies/discover?limit=3&api_token=${token}`
+        `${endpoint}?${queryString}&api_token=${token}`
       );
       const data = await response.json();
       setResult(JSON.stringify({ data }, null, 2));
@@ -33,7 +47,7 @@ const ApiDemonstration: React.FC<{ token: string | undefined }> = ({ token }) =>
 
 const fetchMovies = async () => {
   try {
-    const response = await axios.get('{baseUrl}/api/v1/movies?api_token={token}');
+    const response = await axios.get('{baseUrl}${endpoint}?${buildQueryString(queryParams)}&api_token=${token}');
     console.log(response.data);
   } catch (error) {
     console.error('Error fetching movies:', error);

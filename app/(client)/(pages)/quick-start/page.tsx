@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import ApiDemonstration from '../../components/quick-start/ApiDemonstration'
+import ApiDemonstration from '../../components/ApiDemonstration'
 
 const QuickStart = () => {
   const { data: session } = useSession()
@@ -132,7 +132,7 @@ const QuickStart = () => {
           <p className="mb-4 text-muted-foreground">
             Try out our API with this simple demonstration. Click the button below to fetch some movie data.
           </p>
-          <ApiDemonstration token={(session?.user as any)?.tokenApi} />
+          <ApiDemonstration token={(session?.user as any)?.tokenApi} endpoint="/api/v1/movies/discover" queryParams={{ limit: '3' }} />
         </section>
         <section className="mb-8 bg-gradient-to-r from-purple-500 to-pink-500 p-8 rounded-xl shadow-lg">
           <h2 className="text-3xl font-bold mb-6 text-white">

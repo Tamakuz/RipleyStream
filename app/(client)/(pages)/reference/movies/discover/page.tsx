@@ -1,8 +1,21 @@
+"use client";
+import ApiDemonstration from "@/app/(client)/components/ApiDemonstration";
 import { RootLayout } from "@/app/(client)/layout/RootLayout";
 import { Badge } from "@/components/ui/badge";
+import { useSession } from "next-auth/react";
 import React from "react";
 
 const RefMovies = () => {
+  const { data: session } = useSession();
+  const [queryParams, setQueryParams] = React.useState({
+    page: '1',
+    limit: '1',
+    genre: '',
+    year: new Date().getFullYear().toString()
+  }); 
+
+  console.log(queryParams);
+
   return (
     <RootLayout>
       <div className="container mx-auto px-4 py-8">
@@ -52,19 +65,19 @@ const RefMovies = () => {
           </p>
           <ul className="list-disc list-inside text-base text-muted-foreground">
             <li>
-              <strong>genre</strong>: Filter movies by specific genres such as
+              <strong>Genre</strong>: Filter movies by specific genres such as
               comedy, drama, action, etc.
             </li>
             <li>
-              <strong>year</strong>: Retrieve movies released in a particular
+              <strong>Year</strong>: Retrieve movies released in a particular
               year to focus on new releases or classic films.
             </li>
             <li>
-              <strong>page</strong>: Specify the page number for paginated
+              <strong>Page</strong>: Specify the page number for paginated
               results. Default is 1.
             </li>
             <li>
-              <strong>limit</strong>: Set the number of movies to return per
+              <strong>Limit</strong>: Set the number of movies to return per
               page. Default is 10.
             </li>
           </ul>
@@ -146,6 +159,99 @@ const RefMovies = () => {
               </code>
             </pre>
           </div>
+        </section>
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">
+            API Demonstration
+          </h2>
+          <p className="mb-4 text-muted-foreground">
+            Try out the Discover Movies API with this interactive demonstration.
+            Adjust the parameters below and click the button to make an API
+            call.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            <div>
+              <label
+                htmlFor="page"
+                className="block text-sm font-medium text-foreground mb-1"
+              >
+                Page
+              </label>
+              <input
+                onChange={(e) => {
+                  const value = e.target.value === '' ? '1' : Math.max(1, Number(e.target.value)).toString();
+                  setQueryParams({ ...queryParams, page: value });
+                }}
+                type="number"
+                id="page"
+                name="page"
+                min="1"
+                className="w-full p-2 rounded-md border border-input bg-background text-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="limit"
+                className="block text-sm font-medium text-foreground mb-1"
+              >
+                Limit
+              </label>
+              <input
+                onChange={(e) => {
+                  const value = e.target.value === '' ? '1' : Math.max(1, Number(e.target.value)).toString();
+                  setQueryParams({ ...queryParams, limit: value });
+                }}
+                type="number"
+                id="limit"
+                name="limit"
+                min="1"
+                className="w-full p-2 rounded-md border border-input bg-background text-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="genre"
+                className="block text-sm font-medium text-foreground mb-1"
+              >
+                Genre
+              </label>
+              <input
+                onChange={(e) =>
+                  setQueryParams({ ...queryParams, genre: e.target.value })
+                }
+                type="text"
+                id="genre"
+                name="genre"
+                placeholder="e.g. Action, Comedy"
+                className="w-full p-2 rounded-md border border-input bg-background text-foreground"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="year"
+                className="block text-sm font-medium text-foreground mb-1"
+              >
+                Year
+              </label>
+              <input
+                onChange={(e) =>
+                  setQueryParams({ ...queryParams, year: e.target.value })
+                }
+                type="text"
+                inputMode="numeric"
+                id="year"
+                name="year"
+                defaultValue={new Date().getFullYear().toString()}
+                placeholder={new Date().getFullYear().toString()}
+                className="w-full p-2 rounded-md border border-input bg-background text-foreground"
+              />
+            </div>
+          </div>
+          <ApiDemonstration
+            token={(session?.user as any)?.tokenApi}
+            endpoint="/api/v1/movies/discover"
+            queryParams={queryParams}
+          />
         </section>
       </div>
     </RootLayout>

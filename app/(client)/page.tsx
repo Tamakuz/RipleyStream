@@ -108,10 +108,6 @@ export default function Home() {
             minute.
           </p>
           <div className="mt-4">
-            <h4 className="text-lg font-semibold">Current Rate Limit</h4>
-            <p className="text-md">60 requests per minute</p>
-          </div>
-          <div className="mt-4">
             <h4 className="text-lg font-semibold">Rate Limit Status</h4>
             <p className="text-md">
               You have used 10 out of 60 requests in the last minute.

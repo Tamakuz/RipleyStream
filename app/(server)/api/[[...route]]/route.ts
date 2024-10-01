@@ -9,12 +9,12 @@ import { responseAPI } from '../../utils/responseApi'
 import { getMovieTopRated } from '../../services/movies/getMovieTopRated'
 import { rateLimitedMiddleware } from '../../services/rateLimited'
 import { getMovieCast } from '../../services/movies/getMovieCast'
-import { getSearchMovie } from '../../services/getSearchMovie'
 import { honoMiddleware } from '../../services/honoMiddleware'
 import { getAnimes } from '../../services/animes/getAnimes'
 import { getAnimeById } from '../../services/animes/getAnimeById'
 import { getAnimePopular } from '../../services/animes/getAnimePopular'
 import { cors } from 'hono/cors'
+import { getSearch } from '../../services/getSearch'
 
 const app = new Hono().basePath('/api/v1')
 
@@ -63,11 +63,13 @@ app.get('/movie/:id', getMoviesById)
 app.get('/movies/popular', getMoviePopular)
 app.get('/movies/top-rated', getMovieTopRated)
 app.get('/movie/cast/:movieId', getMovieCast)
-app.get('/movies/search', getSearchMovie)
 
 app.get('/animes/discover', getAnimes)
 app.get('/anime/:id', getAnimeById)
 app.get('/animes/popular', getAnimePopular)
+
+app.get('/search', getSearch)
+
 // Handle not found routes
 app.notFound((c) => responseAPI({
   c,

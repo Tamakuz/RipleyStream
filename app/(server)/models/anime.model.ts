@@ -50,6 +50,9 @@ const animeSchema = new mongoose.Schema({
   episodes: [episodeSchema]
 });
 
+// Add text index for searching
+animeSchema.index({ title: 'text', synopsisID: 'text', synopsisEN: 'text' }); 
+
 const Anime = mongoose.models.Anime || mongoose.model('Anime', animeSchema);
 
 export default Anime;

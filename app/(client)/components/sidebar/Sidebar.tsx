@@ -68,7 +68,7 @@ const AnimesMenu = [
 const SearchMenu = [
   {
     label: "Search",
-    href: "/reference/movies/search",
+    href: "/reference/search",
     method: "GET",
   }
 ];

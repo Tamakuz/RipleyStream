@@ -1,8 +1,17 @@
+"use client";
 import { RootLayout } from "@/app/(client)/layout/RootLayout";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
+import ApiDemonstration from "@/app/(client)/components/ApiDemonstration";
+import { useSession } from "next-auth/react";
 
 const TopRatedPage = () => {
+  const { data: session } = useSession();
+  const [queryParams, setQueryParams] = React.useState({
+    page: '1',
+    limit: '10'
+  });
+
   return (
     <RootLayout>
       <main className="container mx-auto px-4 py-8">
@@ -141,6 +150,62 @@ const TopRatedPage = () => {
               </code>
             </pre>
           </div>
+        </section>
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">
+            API Demonstration
+          </h2>
+          <p className="mb-4 text-muted-foreground">
+            Try out the Top Rated Movies API with this interactive demonstration.
+            Adjust the parameters below and click the button to make an API call.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label
+                htmlFor="page"
+                className="block text-sm font-medium text-foreground mb-1"
+              >
+                Page
+              </label>
+              <input
+                onChange={(e) => {
+                  const value = e.target.value === '' ? '1' : Math.max(1, Number(e.target.value)).toString();
+                  setQueryParams({ ...queryParams, page: value });
+                }}
+                type="number"
+                id="page"
+                name="page"
+                min="1"
+                value={queryParams.page}
+                className="w-full p-2 rounded-md border border-input bg-background text-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="limit"
+                className="block text-sm font-medium text-foreground mb-1"
+              >
+                Limit
+              </label>
+              <input
+                onChange={(e) => {
+                  const value = e.target.value === '' ? '1' : Math.max(1, Number(e.target.value)).toString();
+                  setQueryParams({ ...queryParams, limit: value });
+                }}
+                type="number"
+                id="limit"
+                name="limit"
+                min="1"
+                value={queryParams.limit}
+                className="w-full p-2 rounded-md border border-input bg-background text-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
+            </div>
+          </div>
+          <ApiDemonstration
+            token={(session?.user as any)?.tokenApi}
+            endpoint="/api/v1/movies/top-rated"
+            queryParams={queryParams}
+          />
         </section>
       </main>
     </RootLayout>

@@ -1,8 +1,16 @@
+"use client";
 import { RootLayout } from "@/app/(client)/layout/RootLayout";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
+import ApiDemonstration from "@/app/(client)/components/ApiDemonstration";
+import { useSession } from "next-auth/react";
 
 const MovieCastPage = () => {
+  const { data: session } = useSession();
+  const [queryParams, setQueryParams] = React.useState({
+    movieId: ''
+  });
+
   return (
     <RootLayout>
       <main className="container mx-auto px-4 py-8">
@@ -128,6 +136,38 @@ const MovieCastPage = () => {
               </code>
             </pre>
           </div>
+        </section>
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4 text-foreground">
+            API Demonstration
+          </h2>
+          <p className="mb-4 text-muted-foreground">
+            Try out the Movie Cast API with this interactive demonstration.
+            Enter a movie ID below and click the button to make an API call.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label
+                htmlFor="movieId"
+                className="block text-sm font-medium text-foreground mb-1"
+              >
+                Movie ID
+              </label>
+              <input
+                onChange={(e) => setQueryParams({ ...queryParams, movieId: e.target.value })}
+                type="text"
+                id="movieId"
+                name="movieId"
+                value={queryParams.movieId}
+                className="w-full p-2 rounded-md border border-input bg-background text-foreground"
+              />
+            </div>
+          </div>
+          <ApiDemonstration
+            token={(session?.user as any)?.tokenApi}
+            endpoint={`/api/v1/movie/cast/${queryParams.movieId}`}
+            queryParams={queryParams}
+          />
         </section>
       </main>
     </RootLayout>

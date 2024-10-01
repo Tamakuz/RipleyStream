@@ -1,17 +1,19 @@
-"use client";
+"use client"
 import { RootLayout } from "@/app/(client)/layout/RootLayout";
 import { Badge } from "@/components/ui/badge";
-import React from "react";
-import ApiDemonstration from "@/app/(client)/components/ApiDemonstration";
+import React, { useState } from "react";
 import { useSession } from "next-auth/react";
+import ApiDemonstration from "@/app/(client)/components/ApiDemonstration";
 
-const RefAnimes = () => {
+const SearchPage = () => {
   const { data: session } = useSession();
-  const [queryParams, setQueryParams] = React.useState({
-    genre: '',
-    year: '',
-    page: '1',
-    limit: '10'
+  const [queryParams, setQueryParams] = useState({
+    query: "",
+    page: "1",
+    limit: "10",
+    year: "",
+    genre: "",
+    type: ""
   });
 
   return (
@@ -19,14 +21,13 @@ const RefAnimes = () => {
       <main className="container mx-auto px-4 py-8">
         <section className="mb-8">
           <h1 className="text-3xl font-bold mb-6 text-foreground">
-            Discover Animes
+            Search Movies and Animes
           </h1>
           <p className="text-base text-muted-foreground mb-4">
-            The Discover Animes endpoint provides a powerful way to find animes
-            stored in our database. You can search through a wide array of
-            animes using specific criteria such as genre, release year, and user
-            ratings. This endpoint is perfect for creating dynamic anime
-            discovery features in your applications.
+            The Search endpoint allows you to search for movies and animes in our database
+            based on various criteria. This powerful search functionality enables you
+            to find specific items or groups of items that match certain parameters,
+            making it easy to implement a search feature in your application.
           </p>
         </section>
         <section className="mb-8">
@@ -39,7 +40,7 @@ const RefAnimes = () => {
             </h3>
             <div className="flex items-center space-x-2 bg-card p-2 rounded-md">
               <code className="text-base break-all text-foreground">
-                {`{baseUrl}/animes/discover`}
+                {`{baseUrl}/search`}
               </code>
               <Badge
                 variant="outline"
@@ -55,30 +56,34 @@ const RefAnimes = () => {
             Query Parameters
           </h2>
           <p className="text-base text-muted-foreground mb-2">
-            Enhance your anime discovery by using the following query parameters
-            to filter search results. These parameters allow you to tailor the
-            anime data retrieved from our database, ensuring that the results
-            meet your specific needs or the preferences of your application's
-            users:
+            Use the following query parameters to customize your search request:
           </p>
           <ul className="list-disc list-inside text-base text-muted-foreground">
             <li>
-              <strong>genre</strong>: Filter animes by specific genres such as
-              action, romance, sci-fi, etc.
-            </li>
-            <li>
-              <strong>year</strong>: Retrieve animes released in a particular
-              year to focus on new releases or classic series.
+              <strong>query</strong>: The main search term. This can be a title,
+              an actor's name, or any other relevant search term.
             </li>
             <li>
               <strong>page</strong>: Specify the page number for paginated
               results. Default is 1.
             </li>
             <li>
-              <strong>limit</strong>: Set the number of animes to return per
-              page. Default is 10.
+              <strong>limit</strong>: Set the number of items to return
+              per page. Default is 10.
+            </li>
+            <li>
+              <strong>year</strong>: Filter items by release year.
+            </li>
+            <li>
+              <strong>genre</strong>: Filter items by genre.
+            </li>
+            <li>
+              <strong>type</strong>: Filter search results by type. Available options are 'movies' and 'animes'.
             </li>
           </ul>
+          <p className="text-base text-muted-foreground mt-2">
+            The search results are sorted by relevance to the search query.
+          </p>
         </section>
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-foreground">
@@ -89,8 +94,7 @@ const RefAnimes = () => {
               200 OK - Successful Response
             </h3>
             <p className="text-base text-muted-foreground mb-2">
-              This response indicates that the request was successful and the
-              animes were retrieved.
+              This response indicates that the search was successful and matching items were found.
             </p>
             <pre className="p-2 rounded-md bg-secondary">
               <code className="text-base break-all text-foreground">
@@ -98,9 +102,9 @@ const RefAnimes = () => {
                   {
                     statusCode: 200,
                     status: "success",
-                    message: "Animes fetched successfully",
+                    message: "Items found successfully",
                     results: {
-                      animes: [],
+                      movies: [],
                       totalPages: 0,
                       currentPage: 0,
                     },
@@ -113,11 +117,10 @@ const RefAnimes = () => {
           </div>
           <div className="mb-4">
             <h3 className="text-lg font-semibold mb-2 text-foreground">
-              404 Not Found - No Animes Found
+              404 Not Found - No Items Found
             </h3>
             <p className="text-base text-muted-foreground mb-2">
-              This response is returned when no animes match the search criteria
-              in the database.
+              This response is returned when no items match the search criteria.
             </p>
             <pre className="p-2 rounded-md bg-secondary">
               <code className="text-base break-all text-foreground">
@@ -125,8 +128,8 @@ const RefAnimes = () => {
                   {
                     statusCode: 404,
                     status: "error",
-                    message: "No animes found",
-                    results: [],
+                    message: "No items found matching the search criteria",
+                    results: null,
                   },
                   null,
                   2
@@ -140,7 +143,7 @@ const RefAnimes = () => {
             </h3>
             <p className="text-base text-muted-foreground mb-2">
               This response indicates that there was an internal server error
-              that prevented the request from being fulfilled.
+              that prevented the search request from being fulfilled.
             </p>
             <pre className="p-2 rounded-md bg-secondary">
               <code className="text-base break-all text-foreground">
@@ -148,8 +151,8 @@ const RefAnimes = () => {
                   {
                     statusCode: 500,
                     status: "error",
-                    message: "Failed to fetch animes",
-                    results: [],
+                    message: "Internal server error",
+                    results: null,
                   },
                   null,
                   2
@@ -163,10 +166,60 @@ const RefAnimes = () => {
             API Demonstration
           </h2>
           <p className="mb-4 text-muted-foreground">
-            Try out the Discover Animes API with this interactive demonstration.
-            Enter the query parameters below and click the button to make an API call.
+            Try out the Search API with this interactive demonstration.
+            Adjust the parameters below and click the button to make an API call.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label
+                htmlFor="query"
+                className="block text-sm font-medium text-foreground mb-1"
+              >
+                Query
+              </label>
+              <input
+                onChange={(e) => setQueryParams({ ...queryParams, query: e.target.value })}
+                type="text"
+                id="query"
+                name="query"
+                value={queryParams.query}
+                className="w-full p-2 rounded-md border border-input bg-background text-foreground"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="type"
+                className="block text-sm font-medium text-foreground mb-1"
+              >
+                Type
+              </label>
+              <select
+                onChange={(e) => setQueryParams({ ...queryParams, type: e.target.value })}
+                id="type"
+                name="type"
+                value={queryParams.type}
+                className="w-full p-2 rounded-md border border-input bg-background text-foreground"
+              >
+                <option value="movies">Movies</option>
+                <option value="animes">Animes</option>
+              </select>
+            </div>
+            <div>
+              <label
+                htmlFor="year"
+                className="block text-sm font-medium text-foreground mb-1"
+              >
+                Year
+              </label>
+              <input
+                onChange={(e) => setQueryParams({ ...queryParams, year: e.target.value })}
+                type="number"
+                id="year"
+                name="year"
+                value={queryParams.year}
+                className="w-full p-2 rounded-md border border-input bg-background text-foreground"
+              />
+            </div>
             <div>
               <label
                 htmlFor="genre"
@@ -185,34 +238,22 @@ const RefAnimes = () => {
             </div>
             <div>
               <label
-                htmlFor="year"
-                className="block text-sm font-medium text-foreground mb-1"
-              >
-                Year
-              </label>
-              <input
-                onChange={(e) => setQueryParams({ ...queryParams, year: e.target.value })}
-                type="text"
-                id="year"
-                name="year"
-                value={queryParams.year}
-                className="w-full p-2 rounded-md border border-input bg-background text-foreground"
-              />
-            </div>
-            <div>
-              <label
                 htmlFor="page"
                 className="block text-sm font-medium text-foreground mb-1"
               >
                 Page
               </label>
               <input
-                onChange={(e) => setQueryParams({ ...queryParams, page: e.target.value })}
-                type="text"
+                onChange={(e) => {
+                  const value = e.target.value === '' ? '1' : Math.max(1, Number(e.target.value)).toString();
+                  setQueryParams({ ...queryParams, page: value });
+                }}
+                type="number"
                 id="page"
                 name="page"
+                min="1"
                 value={queryParams.page}
-                className="w-full p-2 rounded-md border border-input bg-background text-foreground"
+                className="w-full p-2 rounded-md border border-input bg-background text-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
             <div>
@@ -223,18 +264,22 @@ const RefAnimes = () => {
                 Limit
               </label>
               <input
-                onChange={(e) => setQueryParams({ ...queryParams, limit: e.target.value })}
-                type="text"
+                onChange={(e) => {
+                  const value = e.target.value === '' ? '1' : Math.max(1, Number(e.target.value)).toString();
+                  setQueryParams({ ...queryParams, limit: value });
+                }}
+                type="number"
                 id="limit"
                 name="limit"
+                min="1"
                 value={queryParams.limit}
-                className="w-full p-2 rounded-md border border-input bg-background text-foreground"
+                className="w-full p-2 rounded-md border border-input bg-background text-foreground [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
           </div>
           <ApiDemonstration
             token={(session?.user as any)?.tokenApi}
-            endpoint="/api/v1/animes/discover"
+            endpoint="/api/v1/search"
             queryParams={queryParams}
           />
         </section>
@@ -243,4 +288,4 @@ const RefAnimes = () => {
   );
 };
 
-export default RefAnimes;
+export default SearchPage;
