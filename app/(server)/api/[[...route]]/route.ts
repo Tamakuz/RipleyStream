@@ -20,11 +20,11 @@ const app = new Hono().basePath('/api/v1')
 
 app.use(prettyJSON())
 
-app.use(cors({
-  origin: '*',
-  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowHeaders: ['*']
-}))
+// app.use(cors({
+//   origin: '*',
+//   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   allowHeaders: ['*']
+// }))
 
 app.use(async (c, next) => {
   const pathname = c.req.path;
